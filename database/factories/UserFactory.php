@@ -14,7 +14,8 @@ class UserFactory extends Factory
     /**
      * The current password being used by the factory.
      */
-    protected static ?string $password;
+    protected $model = User::class;
+
 
     /**
      * Define the model's default state.
@@ -23,12 +24,18 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $rolId = Rol::pluck('id')->random() ?? Rol::factory()->create()->id;
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'rol_id' => $rolId,
+            'name' => $this->faker->firstName(),
+            'lastname' => $this->faker->lastName(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'address' => $this->faker->address(),
+            'password' => bcrypt('password'), // password
+            'phone_number' => $this->faker->phoneNumber(),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 
