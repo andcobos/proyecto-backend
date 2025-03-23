@@ -24,6 +24,15 @@ Route::group(['prefix' => 'v1'], function () {
     Route::put('/orders/{orderId}', [OrderController::class, 'updateStatus']);
     Route::get('/orders/user/{userId}', [OrderController::class, 'getByUser']);
     Route::get('/orders/seller/{sellerId}', [OrderController::class, 'getBySeller']);
+
+    Route::get('/sellers', [SellerController::class, 'index']); 
+    Route::post('/sellers', [SellerController::class, 'store']); 
+    Route::get('/sellers/{sellerId}', [SellerController::class, 'show']); 
+    Route::put('/sellers/{sellerId}', [SellerController::class, 'update']); 
+
+    Route::post('/auth/login', [AuthController::class, 'login']); 
+    Route::post('/auth/register', [AuthController::class, 'register']); 
+    Route::post('/auth/logout', [AuthController::class, 'logout']); 
 });
 
 
