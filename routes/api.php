@@ -17,6 +17,13 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/products/{productId}', [ProductController::class, 'show']);
     Route::put('/products/{productId}', [ProductController::class, 'update']);
     Route::delete('/products/{productId}', [ProductController::class, 'destroy']);
+
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::post('/orders', [OrderController::class, 'store']);
+    Route::get('/orders/{orderId}', [OrderController::class, 'show']);
+    Route::put('/orders/{orderId}', [OrderController::class, 'updateStatus']);
+    Route::get('/orders/user/{userId}', [OrderController::class, 'getByUser']);
+    Route::get('/orders/seller/{sellerId}', [OrderController::class, 'getBySeller']);
 });
 
 
