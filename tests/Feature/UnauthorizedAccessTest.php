@@ -1,7 +1,9 @@
 <?php
 
-test('example', function () {
-    $response = $this->get('/');
+test('unauthenticated users cannot access protected routes', function () {
+    $this->getJson('/v1/orders')
+         ->assertStatus(401);
 
-    $response->assertStatus(200);
+    $this->postJson('/v1/products', [])
+         ->assertStatus(401);
 });
