@@ -7,10 +7,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens, HasRoles;
 
     protected $table = 'users';
 
@@ -34,6 +36,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    protected function getDefaultGuardName(): string
+    {
+        return 'api';
+    }
+
     // Relación Rol
     public function rol(): BelongsTo
     {
@@ -44,5 +51,16 @@ class User extends Authenticatable
     public function seller(): HasOne
     {
         return $this->hasOne(Seller::class, 'user_id');
+    }
+
+    // Verificar si el usuario es un vendedor
+    public function isSeller(): bool
+    {
+        return $this->seller()->exists();
+    }
+
+    // Verificar si el usuario es un admin
+    public function isAdmin(): bool{
+        return $this->hasRole('admin');
     }
 }
