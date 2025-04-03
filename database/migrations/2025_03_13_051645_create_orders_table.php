@@ -1,4 +1,4 @@
-<?php
+php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('province_id')->constrained('provinces')->onDelete('cascade');
             $table->dateTime('order_date');
             $table->decimal('total', 10, 2);
-            $table->timestamps();   
+            $table->timestamps();
         });
     }
 
