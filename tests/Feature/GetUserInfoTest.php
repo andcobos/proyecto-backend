@@ -6,8 +6,17 @@ test('retrieves authenticated user info', function () {
     $this->assertNotNull(DB::connection());
 
     $user = User::factory()->create();
-    Sanctum::actingAs($user);
+    $response = $this->actingAs($user)->getJson('/users');
 
-    $this->getJson('/users')
-        ->assertStatus(200);
+    $response->assertStatus(200)
+        ->assertJsonStructure([
+            'id',
+            'name',
+            'lastname',
+            'email',
+            'address',
+            'phone_number',
+            'created_at',
+            'updated_at'
+        ]);
 });

@@ -3,6 +3,8 @@
 use App\Models\Product;
 
 test('gets products details', function () {
+    $this->assertNotNull(DB::connection());
+    
     $product = Product::factory()->create([
         'product_name' => 'Test Product',
         'description' => 'Test Description',
