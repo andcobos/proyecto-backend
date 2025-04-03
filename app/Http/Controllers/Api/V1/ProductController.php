@@ -6,82 +6,94 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Product::class, 'product', [
+            'except' => ['index', 'show']
+        ]);
+    }
+
    
     public function index(Request $request)
     {
-        $query = Product::query();
+        $query = Product::with(['category', 'seller', 'stockStatus']);
 
         if ($request->has('search') && !empty($request->search)) {
             $query->where('product_name', 'like', '%' . $request->search . '%');
         }
 
-        $perPage = $request->input('per_page', 10);
-        $products = $query->paginate($perPage);
+        $products = $query->paginate($request->input('per_page', 10));
 
-        return response()->json($products);
+        return response()->json([
+            'status' => 'success',
+            'data' => $products
+        ]);
     }
 
     
-    public function show($id)
+    public function show(Product $product)
     {
-        $product = Product::find($id);
+        $product->load(['category', 'seller', 'stockStatus']);
 
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
-        }
-
-        return response()->json($product);
+        return response()->json([
+            'status' => 'success',
+            'data' => $product
+        ]);
     }
 
-
-    public function store(Request $request)
+    
+    public function store(ProductRequest $request)
     {
-        $validated = $request->validate([
-            'product_name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric|min:0'
-        ]);
+        $user = Auth::user();
+
+        if (!$user->isSeller() || !$user->seller) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Solo los vendedores pueden crear productos'
+            ], 403);
+        }
 
         $product = Product::create([
-            'product_name' => $validated['product_name'],
-            'description' => $validated['description'],
-            'price' => $validated['price'],
-            'user_id' => Auth::id()
+            'product_name' => $request->product_name,
+            'sku' => $request->sku,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'stock_status_id' => $request->stock_status_id,
+            'seller_id' => $user->seller->id,
+            'category_id' => $request->category_id,
         ]);
 
-        return response()->json($product, 201);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Producto creado exitosamente',
+            'data' => $product
+        ], 201);
     }
 
     
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        if ($product->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        $product->update($request->validated());
 
-        $validated = $request->validate([
-            'product_name' => 'sometimes|required|string|max:255',
-            'description' => 'sometimes|required|string',
-            'price' => 'sometimes|required|numeric|min:0'
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Producto actualizado exitosamente',
+            'data' => $product
         ]);
-
-        $product->update($validated);
-
-        return response()->json($product);
     }
 
     
     public function destroy(Product $product)
     {
-        if ($product->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         $product->delete();
 
-        return response()->json(null, 204);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Producto eliminado exitosamente'
+        ]);
     }
 }
