@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Seller;
+use App\Models\SellerStatus;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,7 +12,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class SellerFactory extends Factory
 {
-    protected $model = Seller::Class;
+    protected $model = Seller::class;
+
     /**
      * Define the model's default state.
      *
@@ -17,8 +21,9 @@ class SellerFactory extends Factory
      */
     public function definition(): array
     {
-        $userId = User::pluck('id')->random()?? User::factory()->create()->id;
-        $sellerStatusId = SellerStatus::pluck('id')->random() ?? SellerStatus::factory()->create()->id;
+        // Using query()->inRandomOrder()->first() instead of pluck()->random()
+        $userId = User::query()->inRandomOrder()->first()?->id ?? User::factory()->create()->id;
+        $sellerStatusId = SellerStatus::query()->inRandomOrder()->first()?->id ?? SellerStatus::factory()->create()->id;
 
         return [
             'user_id' => $userId,

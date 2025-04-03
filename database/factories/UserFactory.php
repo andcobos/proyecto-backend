@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Rol;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -24,7 +26,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $rolId = Rol::pluck('id')->random() ?? Rol::factory()->create()->id;
+        $rolId = Rol::query()->inRandomOrder()->first()->id ?? 1;
 
         return [
             'rol_id' => $rolId,

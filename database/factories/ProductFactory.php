@@ -2,6 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
+use App\Models\ProductCategory;
+use App\Models\Seller;
+use App\Models\StockStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ProductFactory extends Factory
 {
-    protected $model = ProductFactory::class;
+    protected $model = Product::class;
 
     /**
      * Define the model's default state.
@@ -18,9 +22,9 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $stockStatusId = StockStatus::pluck('id')->random() ?? StockStatus::factory()->create()->id;
-        $sellerId = Seller::pluck('id')->random() ?? Seller::factory()->create()->id;
-        $categoryId = ProductCategory::pluck('id')->random() ?? ProductCategory::factory()->create()->id;
+        $stockStatusId = StockStatus::query()->inRandomOrder()->first()?->id ?? StockStatus::factory()->create()->id;
+        $sellerId = Seller::query()->inRandomOrder()->first()?->id ?? Seller::factory()->create()->id;
+        $categoryId = ProductCategory::query()->inRandomOrder()->first()?->id ?? ProductCategory::factory()->create()->id;
 
         return [
             'product_name' => $this->faker->words(3, true),

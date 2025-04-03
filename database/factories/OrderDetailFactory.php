@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class OrderDetailFactory extends Factory
 {
     protected $model = OrderDetail::class;
+
     /**
      * Define the model's default state.
      *
@@ -17,15 +21,14 @@ class OrderDetailFactory extends Factory
      */
     public function definition(): array
     {
-        $orderId = Order::pluck('id')->random() ?? Order::factory()->create()->id;
-
-        $productId = Order::pluck('id')->random() ?? Order::factory()->create->id;
+        $orderId = Order::query()->inRandomOrder()->first()?->id ?? Order::factory()->create()->id;
+        $productId = Product::query()->inRandomOrder()->first()?->id ?? Product::factory()->create()->id;
 
         $product = Product::find($productId);
         $quantity = $this->faker->numberBetween(1, 5);
         $price = $product ? $product->price : $this->faker->randomFloat(2, 10, 500);
         $subtotal = $price * $quantity;
-        
+
         return [
             'order_id' => $orderId,
             'product_id' => $productId,
