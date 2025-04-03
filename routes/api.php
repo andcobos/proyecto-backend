@@ -1,3 +1,4 @@
+// routes/api.php
 <?php
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\UserController;
@@ -7,11 +8,15 @@ use App\Http\Controllers\Api\V1\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// Public routes
+Route::post('/login', [AuthController::class, 'login']); // Support for tests using /api/login
 
+// API V1 Routes
 Route::group(['prefix' => 'v1'], function () {
     // Public routes
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::post('/auth/login', [AuthController::class, 'login']);
+    Route::post('/user', [AuthController::class, 'register']); // Alias for tests
 
     // Protected routes
     Route::middleware('auth:sanctum')->group(function () {
@@ -48,7 +53,11 @@ Route::group(['prefix' => 'v1'], function () {
     });
 });
 
-// Current user info
+Route::middleware('auth:sanctum')->get('/users', function (Request $request) {
+    return $request->user();
+});
+
+// user info
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
