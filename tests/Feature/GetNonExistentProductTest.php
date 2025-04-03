@@ -1,7 +1,13 @@
 <?php
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 
-test('example', function () {
-    $response = $this->get('/');
+test('returns 404 when getting a nonexistent product', function () {
+    $this->assertNotNull(DB::connection());
 
-    $response->assertStatus(200);
+    $existingProduct = Product::factory()->create();
+    $nonExistentId = $existingProduct->id + 9999;
+
+    $this->getJson("/v1/products/{$nonExistentId}")
+        ->assertStatus(404);
 });
