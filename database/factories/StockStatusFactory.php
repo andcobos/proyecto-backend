@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\StockStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,8 +19,7 @@ class StockStatusFactory extends Factory
     public function definition(): array
     {
         return [
-            'stock_status' => $this->faker->randomElement(['in_stock', 'out_of_stock']),
-
+            'status' => $this->faker->randomElement(['in_stock', 'out_of_stock']),
         ];
     }
 }

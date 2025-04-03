@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Province;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -33,7 +34,7 @@ class ProvinceFactory extends Factory
             'Morazán',
             'La Unión'
         ];
-        
+
         return [
             'province' => $this->faker->randomElement($departamentos),
         ];

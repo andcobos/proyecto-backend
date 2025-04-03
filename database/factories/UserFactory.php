@@ -26,7 +26,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $rolId = Rol::query()->inRandomOrder()->first()->id ?? 1;
+        $rolId = \App\Models\Rol::query()->inRandomOrder()->first()?->id ?? 1;
 
         return [
             'rol_id' => $rolId,

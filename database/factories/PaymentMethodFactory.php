@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\PaymentMethod;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class PaymentMethodFactory extends Factory
     public function definition(): array
     {
         return [
-            'payment_method' => $this->faker->randomElement(['credit_card', 'debit_card', 'bank_transfer', 'cash']),
+            'method' => $this->faker->randomElement(['credit_card', 'debit_card', 'bank_transfer', 'cash']),
         ];
     }
 }

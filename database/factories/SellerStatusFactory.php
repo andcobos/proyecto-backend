@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\SellerStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class SellerStatusFactory extends Factory
 {
-    protected $model = SellerSatus::class;
+    protected $model = SellerStatus::class;
     /**
      * Define the model's default state.
      *
@@ -18,7 +19,7 @@ class SellerStatusFactory extends Factory
     public function definition(): array
     {
         return [
-            'seller_status' => $this->faker->randomElement(['active', 'suspended', 'banned', 'pending approval']),
+            'status' => $this->faker->randomElement(['active', 'suspended', 'banned', 'pending approval']),
         ];
     }
 }

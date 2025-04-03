@@ -12,7 +12,6 @@ class StockStatus extends Model
     protected $table = 'stock_status';
 
     protected $fillable = [
-        'stock_status',
+        'status',
     ];
 }
-

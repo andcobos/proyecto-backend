@@ -13,7 +13,7 @@ class OrderStatusSeeder extends Seeder
         $statuses = ['pending', 'paid', 'canceled', 'refunded'];
 
         foreach ($statuses as $status) {
-            OrderStatus::create(['order_status' => $status]);
+            OrderStatus::create(['status' => $status]);
         }
     }
 }

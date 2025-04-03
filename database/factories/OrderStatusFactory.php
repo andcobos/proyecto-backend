@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class OrderStatusFactory extends Factory
     public function definition(): array
     {
         return [
-            'order_status' => $this->faker->randomElement(['pending', 'paid', 'canceled', 'refunded'])
+            'status' => $this->faker->randomElement(['pending', 'paid', 'canceled', 'refunded'])
         ];
     }
 }

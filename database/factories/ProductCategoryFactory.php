@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\ProductCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,11 +19,10 @@ class ProductCategoryFactory extends Factory
      */
     public function definition(): array
     {
-
         $categories = ['Tecnología y Electrónica', 'Moda y Accesorios', 'Hogar y Muebles', 'Alimentos y Bebidas', 'Deportes y Entretenimiento', 'Salud y Belleza', 'Automotriz y Motocicletas', 'Bebés y Niños', 'Oficina y Papelería'];
 
         return [
-            'product_category' => $this->faker->randomElement($categories)
+            'category' => $this->faker->randomElement($categories)
         ];
     }
 }
