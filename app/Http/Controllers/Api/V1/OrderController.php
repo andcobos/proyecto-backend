@@ -14,7 +14,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $orders = Order::where('user_id', Auth::id())
-            ->with('products') // si tenés relación
+            ->with('products') 
             ->paginate($request->input('per_page', 10));
 
         return response()->json($orders);
