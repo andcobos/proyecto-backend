@@ -13,14 +13,23 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('rol_id')->nullable();
             $table->string('name');
-            $table->string('lastname');
+            $table->string('lastname'); // Assuming you have this
             $table->string('email')->unique();
-            $table->string('address')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('phone_number')->nullable();
+            $table->string('address')->nullable(); // From AuthController
+            $table->string('phone_number')->nullable(); // From AuthController
+
+            // Add rol_id and foreign key HERE
+            $table->unsignedBigInteger('rol_id'); // Or just foreignId
+            // $table->foreignId('rol_id')->constrained('rols'); // Simpler Laravel 8+ way
+
+            $table->rememberToken();
             $table->timestamps();
+
+            // Define the foreign key constraint
+            $table->foreign('rol_id')->references('id')->on('rols')->onDelete('cascade'); // Or restrict, set null etc.
         });
     }
 
