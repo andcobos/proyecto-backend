@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateUserProfileRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,8 +28,8 @@ class UserController extends Controller
         ]);
     }
 
-  
-    public function update(Request $request, $id)
+
+    public function update(UpdateUserProfileRequest $request, $id)
     {
         $user = Auth::user();
 
@@ -36,20 +37,7 @@ class UserController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $validated = $request->validate([
-            'name' => 'sometimes|required|string|min:2|max:255',
-            'lastname' => 'sometimes|required|string|min:2|max:255',
-            'email' => [
-                'sometimes',
-                'required',
-                'email',
-                Rule::unique('users')->ignore($user->id),
-            ],
-            'address' => 'sometimes|nullable|string|max:255',
-            'phone_number' => 'sometimes|nullable|string|max:20',
-        ]);
-
-        $user->update($validated);
+        $user->update($request->validated());
 
         return response()->json($user);
     }

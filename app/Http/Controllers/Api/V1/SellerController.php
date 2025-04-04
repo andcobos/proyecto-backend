@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\V1;
-
+use App\Http\Requests\UpdateSellerStatusRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Seller;
 use App\Models\SellerStatus;
@@ -46,15 +46,15 @@ class SellerController extends Controller
     }
 
     
-    public function updateStatus(Request $request, $sellerId)
+    public function updateStatus(UpdateSellerStatusRequest $request, $sellerId)
     {
         if (!Gate::allows('is-admin')) {
             return response()->json(['message' => 'No autorizado.'], 403);
         }
 
         $seller = Seller::findOrFail($sellerId);
+        $status = $request->validated()['status'];
 
-        $status = $request->input('status'); // por ejemplo: 'active', 'suspended', etc.
         $statusId = SellerStatus::where('seller_status', $status)->value('id');
 
         if (!$statusId) {

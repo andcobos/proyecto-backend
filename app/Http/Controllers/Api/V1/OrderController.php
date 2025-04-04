@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\UpdateOrderStatusRequest;
 
 class OrderController extends Controller
 {
@@ -32,7 +34,7 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
-   
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -71,16 +73,13 @@ class OrderController extends Controller
         return response()->json($order, 201);
     }
 
- 
-    public function updateStatus(Request $request, Order $order)
+    public function updateStatus(UpdateOrderStatusRequest $request, Order $order)
     {
         if ($order->user_id !== Auth::id()) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $validated = $request->validate([
-            'status' => 'required|in:pending,processing,shipped,completed,canceled',
-        ]);
+        $validated = $request->validated(); // Ya está validado por el Form Request
 
         $order->status = $validated['status'];
         $order->save();
