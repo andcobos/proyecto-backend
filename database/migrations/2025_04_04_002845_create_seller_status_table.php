@@ -6,23 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('product_categories', function (Blueprint $table) {
+        Schema::create('seller_status', function (Blueprint $table) {
             $table->id();
-            $table->string('category');
-            $table->timestamps();
+            $table->string('seller_status')->unique(); // e.g., 'pending', 'approved', 'rejected'
+            $table->timestamps(); // Optional
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('product_categories');
+        Schema::dropIfExists('seller_status');
     }
 };

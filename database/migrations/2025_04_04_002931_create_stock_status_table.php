@@ -6,21 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('stock_status', function (Blueprint $table) {
             $table->id();
-            $table->enum('status', ['in_stock', 'out_of_stock']);
-            $table->timestamps();
+            $table->string('stock_status')->unique(); // e.g., 'in_stock', 'out_of_stock', 'low_stock'
+            $table->timestamps(); // Optional
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('stock_status');

@@ -6,21 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('order_status', function (Blueprint $table) {
             $table->id();
-            $table->enum('status', ['pending', 'paid', 'cancelled', 'refunded']);
-            $table->timestamps();
+            $table->string('order_status')->unique(); // e.g., 'pending', 'processing', 'shipped', 'delivered', 'cancelled'
+            $table->timestamps(); // Optional
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('order_status');
