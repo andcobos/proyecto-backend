@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\V1;
-
+use App\Http\Requests\UpdateUserRoleRequest;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Seller;
@@ -35,21 +35,17 @@ class AdminController extends Controller
     }
 
     
-    public function updateUserRole(Request $request, $userId)
+    public function updateUserRole(UpdateUserRoleRequest $request, $userId)
     {
         if (!Gate::allows('is-admin')) {
             return response()->json(['message' => 'No autorizado.'], 403);
         }
-
+    
         $user = User::findOrFail($userId);
-        $newRole = $request->input('rol');
-
-        if (!in_array($newRole, ['admin', 'seller', 'user'])) {
-            return response()->json(['message' => 'Rol inválido.'], 422);
-        }
-
-        $user->update(['rol' => $newRole]);
-
+        $user->update([
+            'rol' => $request->rol
+        ]);
+    
         return response()->json([
             'message' => 'Rol actualizado correctamente.',
             'user' => $user
